@@ -1,0 +1,12 @@
+{
+  "name": "fastify-websocket-issue-45",
+  "description": "Reproduction for fastify/fastify-websocket#45",
+  "version": "0.0.0",
+  "private": true,
+  "license": "MIT",
+  "dependencies": {
+    "fastify": "^2.11.0",
+    "fastify-graceful-shutdown": "^2.0.1",
+    "fastify-websocket": "^1.1.0"
+  }
+}
