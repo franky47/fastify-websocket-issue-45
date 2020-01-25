@@ -7,6 +7,6 @@ client.on('open', () => {
   client.send('foo')
 })
 
-client.on('close', () => {
-  console.log('Disconnected')
+client.on('close', event => {
+  console.log('Disconnected', event)
 })
