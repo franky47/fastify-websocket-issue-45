@@ -1,34 +1,37 @@
-const Fastify = require("fastify");
+const Fastify = require('fastify')
 
-const server = Fastify({ logger: true });
+const server = Fastify({ logger: true })
 
 // The order does not seem to matter here:
-server.register(require("fastify-graceful-shutdown"));
-server.register(require("fastify-websocket"));
+server.register(require('fastify-graceful-shutdown'))
+server.register(require('fastify-websocket'))
 
-server.get("/foo", { websocket: true }, (connection, req) => {
-  const socketID = req.headers["sec-websocket-key"];
+server.get('/foo', { websocket: true }, (connection, req) => {
+  const socketID = req.headers['sec-websocket-key']
   server.log.info({
-    msg: "Client connected",
+    msg: 'Client connected',
     socket: socketID
-  });
-  connection.socket.on("message", message => {
+  })
+  connection.socket.on('message', message => {
     server.log.info({
       msg: message,
       socket: socketID
-    });
-  });
-  connection.socket.on("close", () => {
+    })
+  })
+  connection.socket.on('close', () => {
     server.log.info({
-      msg: "Client disconnected",
+      msg: 'Client disconnected',
       socket: socketID
-    });
-  });
-});
+    })
+  })
+})
 
-server.addHook("onClose", (server, done) => {
-  server.log.info("in the onClose hook");
-  done();
-});
+server.addHook('onClose', (server, done) => {
+  server.log.info('in the onClose hook')
+  server.websocketServer.clients.forEach(client => {
+    client.end()
+  })
+  done()
+})
 
-server.listen({ port: 3000 });
+server.listen({ port: 3000 })
